@@ -2,3 +2,5 @@ github.com/geofpwhite/adventHelperFunctions v0.0.0-20240805213723-f7c273225e6b h
 github.com/geofpwhite/adventHelperFunctions v0.0.0-20240805213723-f7c273225e6b/go.mod h1:rATEA4qASXdx92GoEIEiLkIRq41sYUxMrtlcF1ZbKO8=
 github.com/geofpwhite/adventHelperFunctions v0.0.0-20240805215006-4bbc08ed7413 h1:xTN9xtk1cwKXFvDGtECldM8f1XxMgg2TTG7CmbgVyag=
 github.com/geofpwhite/adventHelperFunctions v0.0.0-20240805215006-4bbc08ed7413/go.mod h1:rATEA4qASXdx92GoEIEiLkIRq41sYUxMrtlcF1ZbKO8=
+github.com/geofpwhite/go_data_structures v0.0.0-20240816184354-169ade1736dc h1:/6x+koJ4ahQi0ELG3TDgXOFkMVmd/HBY48xKq3ls0Dg=
+github.com/geofpwhite/go_data_structures v0.0.0-20240816184354-169ade1736dc/go.mod h1:tV/yn/6YIG2ublWA3y0kZqr7uWS+NwHYBvD3gb+6Nh0=

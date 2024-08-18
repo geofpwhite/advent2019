@@ -76,6 +76,9 @@ func part2() {
 		signal[i], _ = strconv.Atoi(string(char))
 	}
 	// newLine := ""
+	//because phase is in second half of the signal, the patttern we use will be the first half of 0's and the second half of 1's
+	//had to look this up but the logic is very cool
+
 	for phase := 0; phase < 100; phase++ {
 		cumulative := 0
 		println(phase)

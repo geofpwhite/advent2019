@@ -16,6 +16,13 @@ func main() {
 	part1()
 }
 
+type node struct {
+	value                 int
+	up, down, left, right *node
+}
+
+var nullNode *node = &node{-1, nil, nil, nil, nil}
+
 func parse() ([]int, int) {
 	content, _ := os.ReadFile("input.txt")
 	// content, _ := os.ReadFile("test.txt")
@@ -162,11 +169,12 @@ func part1() {
 			for j := cycle; j%5 > 0; j = (j + 1) % 5 {
 				if !slices.Contains(rob.directionsTried[[2]int{rob.x, rob.y}], direction(j)) && rob.field[getCoordsForDirection(direction(j), rob.x, rob.y)] != -1 {
 					rob.curDirectionTrying = direction(j)
+					fmt.Println(direction(j), rob.x, rob.y)
 					rob.moveForward(rob.curDirectionTrying)
 					break
 				}
 			}
-			cycle = ((cycle) % 4) + 1
+			cycle = (cycle % 4) + 1
 			if paramModes[0] == '2' {
 				command[base+command[i+1]] = int(rob.curDirectionTrying)
 			} else {
