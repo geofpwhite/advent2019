@@ -359,6 +359,17 @@ func (g *graph) bestMove(rqp robotQueuePositions) robotQueuePositions {
 		}
 	}
 	newRqp.steps = minDist + rqp.steps
+
+	switch quadrant {
+	case 0:
+		fmt.Println("best move is to move top left to ", newRqp.topLeft, " from ", rqp.topLeft, " which is ", minDist, " steps")
+	case 1:
+		fmt.Println("best move is to move top right to ", newRqp.topRight, " from ", rqp.topRight, " which is ", minDist, " steps")
+	case 2:
+		fmt.Println("best move is to move bottom left to ", newRqp.bottomLeft, " from ", rqp.bottomLeft, " which is ", minDist, " steps")
+	case 3:
+		fmt.Println("best move is to move bottom right to ", newRqp.bottomRight, " from ", rqp.bottomRight, " which is ", minDist, " steps")
+	}
 	return newRqp
 }
 
@@ -370,35 +381,44 @@ func (g *graph) shortestPathToKeyIfPossible(n *node, key rune, unlocked map[rune
 	}
 	start := queueElement{node: n, steps: 0, keysCollected: unlocked}
 	queue := []queueElement{start}
-	dists := map[*node]int{}
 	keyNode := start.node
+	for _, node := range *g {
+		if node.value == key {
+			keyNode = node
+			break
+		}
+	}
+	dists := map[*node]int{keyNode: -1}
+	if n.x == keyNode.x && n.y == keyNode.y {
+		return false, -1
+	}
 	for len(queue) > 0 {
 		cur := queue[0]
-		n := cur.node
+		nod := cur.node
 		queue = queue[1:]
-		if strings.Contains(uCase, string(n.value)) && !unlocked[rune(strings.ToLower(string(n.value))[0])] {
+		if strings.Contains(uCase, string(nod.value)) && !unlocked[rune(strings.ToLower(string(nod.value))[0])] {
 			continue
 		}
-		if n.value == key {
-			keyNode = n
+		if nod.value == key {
+			keyNode = nod
 		}
 		neighbors := []*node{cur.node.left, cur.node.right, cur.node.up, cur.node.down}
 		for _, ne := range neighbors {
 			if ne == nil {
 				continue
 			}
-			distance := max(math.Abs(float64(ne.x-n.x)), math.Abs(float64(ne.y-n.y)))
+			distance := max(math.Abs(float64(ne.x-nod.x)), math.Abs(float64(ne.y-nod.y)))
 			newUnlocked := make(map[rune]bool)
 			maps.Copy(newUnlocked, cur.keysCollected)
 			if ne != nil && (dists[ne] <= 0 || dists[ne] > int(distance)+cur.steps) {
 				queue = append(queue, queueElement{ne, int(distance) + cur.steps, newUnlocked})
 				dists[ne] = int(distance) + cur.steps
-				fmt.Println(dists[ne])
+				// fmt.Println(int(distance))
 			}
 		}
 	}
 
-	fmt.Println(dists[keyNode])
+	fmt.Println(dists[keyNode], "steps from", n.x, n.y, "to", keyNode.x, keyNode.y)
 	return dists[keyNode] > 0, dists[keyNode]
 }
 
@@ -408,11 +428,12 @@ func part2() {
 	// for coord, node := range g {
 	// 	fmt.Println(node, coord, string(node.value))
 	// }
-	fmt.Println(len(g))
+	// fmt.Println(len(g))
 	var startNodes []*node = make([]*node, 0)
 	for _, n := range g {
 		if n.value == '@' {
 			startNodes = append(startNodes, n)
+			fmt.Println(n.x, n.y)
 		}
 	}
 	// shortestPathsToRobotPositionsByUnlockedKeys := map[[4]*node]map[string]int{}
@@ -432,12 +453,18 @@ func part2() {
 	for len(elem.unlocked) < 26 {
 		// fmt.Println(elem.unlocked)
 		elem = g.bestMove(elem)
-		fmt.Println(elem.steps)
+		// fmt.Println(elem.steps)
 	}
 	fmt.Println(elem)
 	fmt.Println(string(99))
 
 }
+
+// func try2() {
+// 	g := parse()
+// 	// for _,char := range
+// }
+
 func main() {
 	part1()
 	part2()
