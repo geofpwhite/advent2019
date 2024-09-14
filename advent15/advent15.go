@@ -141,7 +141,6 @@ type node struct {
 type graph map[[2]int]*node
 
 func part1() {
-	fmt.Println("f")
 	base := 0
 	command, length := parse()
 	rob := droid{field: map[[2]int]int{{0, 0}: 1}, directionsTried: make(map[[2]int][]direction)}

@@ -52,7 +52,7 @@ type pathAndPosition struct {
 }
 
 func (p *pathAndPosition) toString() (str string) {
-	str += strconv.Itoa(p.position[0]) + " " + strconv.Itoa(p.position[1])
+	// str += strconv.Itoa(p.position[0]) + " " + strconv.Itoa(p.position[1])
 	visited := ""
 	visitedNum := 0
 	for p.path != nil {
@@ -105,8 +105,46 @@ func (p *pathAndPosition) toString() (str string) {
 		str = directionToAdd + strconv.Itoa(p.edge) + " " + str
 		p = p.path
 	}
-	str += "\n" + visited + strconv.Itoa(visitedNum)
+	// str += "\n" + visited + strconv.Itoa(visitedNum)
 	return
+}
+
+func longestRepeatingSubSequences(str string) ([][]int, int) {
+	tokens := strings.Split(str, " ")
+	dynamicArray := make([][]int, len(tokens))
+	for i := range dynamicArray {
+		dynamicArray[i] = make([]int, len(tokens))
+	}
+
+	for i := range len(dynamicArray) - 1 {
+		for j := range len(dynamicArray) - 1 {
+			if tokens[i] == tokens[j] && i != j {
+				dynamicArray[i+1][j+1] = 1 + dynamicArray[i][j]
+			} else {
+				// dynamicArray[i+1][j+1] = max(dynamicArray[i+1][j], dynamicArray[i][j+1])
+				dynamicArray[i+1][j+1] = 0
+			}
+		}
+	}
+	// fmt.Println(dynamicArray[len(tokens)-1])
+	fmt.Println(len(dynamicArray))
+	//ranges
+	// covered := [][2]int{}
+
+	for i, ary := range dynamicArray {
+		if i == 0 {
+			continue
+		}
+		ary = ary[i:]
+		// fmt.Println(ary)
+		for j := range ary {
+			if dynamicArray[i][i+j] > 3 && i < len(dynamicArray)-2 && dynamicArray[i+1][i+j] == 0 {
+				fmt.Println("repeats sequence of length", dynamicArray[i][i+j]-1, "starting at ", i-dynamicArray[i][i+j], " at ", j+i-dynamicArray[i][i+j])
+				fmt.Println(tokens[i-dynamicArray[i][i+j] : i-dynamicArray[i][i+j]+dynamicArray[i][i+j]-1])
+			}
+		}
+	}
+	return dynamicArray, dynamicArray[len(tokens)-1][len(tokens)-1]
 }
 
 func (g *graph) allVisited(path *pathAndPosition) bool {
@@ -269,7 +307,7 @@ func part2() {
 	for len(queue) > 0 {
 		cur := queue[0]
 		queue = queue[1:]
-		fmt.Println(cur.toString())
+		// fmt.Println(cur.toString())
 		if g.allVisited(&cur) || cur.position == [2]int{38, 30} {
 			finished = append(finished, cur)
 			continue
@@ -300,6 +338,8 @@ func part2() {
 	fmt.Println(finished)
 	for _, p := range finished {
 		fmt.Println(p.toString())
+		_, length := longestRepeatingSubSequences(p.toString())
+		fmt.Println(length)
 	}
 
 }
